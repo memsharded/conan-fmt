@@ -46,9 +46,12 @@ Then you can use it as:
 
 ```bash
 $ mkdir build && cd build
-$ conan install ..  (this will use your default conan settings)
+$ conan install .. --build=missing (this will use your default conan settings)
 $ cmake .. -G "Visual Studio 14 Win64"
 $ cmake --build . --config Release
 $ bin/example
 ```
+
+Note that I am using ``--build=missing``. I haven't uploaded binary packages yet, just the recipe,
+so the package has to be built from sources.
 
