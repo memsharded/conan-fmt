@@ -9,14 +9,16 @@ class FmtConan(ConanFile):
     url = "https://github.com/memsharded/conan-fmt"
     build_policy = "missing"
     settings = "os", "arch", "compiler", "build_type"
-    options = {"shared": [True, False], "header_only": [True, False],}
-    default_options = "shared=False", "header_only=False"
+    options = {"shared": [True, False], "header_only": [True, False], "fPIC": [True, False]}
+    default_options = "shared=False", "header_only=False", "fPIC=True"
 
-    def config_settings(self):
+    def configure(self):
         if self.options.header_only:
             self.settings.clear()
         else:
             self.build_policy = None
+            if self.settings.os == "Windows":
+                self.options.remove("fPIC")
 
     def source(self):
        self.run("git clone https://github.com/fmtlib/fmt")
@@ -25,10 +27,12 @@ class FmtConan(ConanFile):
     def build(self):
         if self.options.header_only:
             return
-        cmake = CMake(self.settings)
-        shared = "-DBUILD_SHARED_LIBS=ON" if self.options.shared else ""
-        shared += " -DFMT_TEST=OFF -DFMT_INSTALL=OFF -DFMT_DOCS=OFF"
-        self.run('cmake fmt %s %s' % (cmake.command_line, shared))
+        cmake = CMake(self.settings)        
+        flags = "-DBUILD_SHARED_LIBS=ON" if self.options.shared else ""
+        flags += " -DFMT_TEST=OFF -DFMT_INSTALL=OFF -DFMT_DOCS=OFF"
+        if self.settings.os != "Windows" and self.options.fPIC:
+            flags += "-DCMAKE_POSITION_INDEPENDENT_CODE=TRUE"
+        self.run('cmake fmt %s %s' % (cmake.command_line, flags))
         self.run("cmake --build . %s" % cmake.build_config)
 
     def package(self):
