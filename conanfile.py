@@ -11,6 +11,7 @@ class FmtConan(ConanFile):
     settings = "os", "arch", "compiler", "build_type"
     options = {"shared": [True, False], "header_only": [True, False], "fPIC": [True, False]}
     default_options = "shared=False", "header_only=False", "fPIC=True"
+    generators = "cmake"
 
     def configure(self):
         if self.options.header_only:
@@ -23,6 +24,9 @@ class FmtConan(ConanFile):
     def source(self):
        self.run("git clone https://github.com/fmtlib/fmt")
        self.run("cd fmt && git checkout 3.0.0")
+       tools.replace_in_file("fmt/CMakeLists.txt", "project(FMT)", """project(FMT)
+include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
+conan_basic_setup()""")
 
     def build(self):
         if self.options.header_only:
