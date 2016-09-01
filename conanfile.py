@@ -13,13 +13,17 @@ class FmtConan(ConanFile):
     default_options = "shared=False", "header_only=False", "fPIC=True"
     generators = "cmake"
 
+    def config_options(self):
+        if self.settings.os == "Windows":
+            self.options.remove("fPIC")
+
     def configure(self):
         if self.options.header_only:
             self.settings.clear()
+            self.options.remove("shared")
+            self.options.remove("fPIC")
         else:
             self.build_policy = None
-            if self.settings.os == "Windows":
-                self.options.remove("fPIC")
 
     def source(self):
        self.run("git clone https://github.com/fmtlib/fmt")
