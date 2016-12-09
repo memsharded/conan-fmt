@@ -39,7 +39,7 @@ conan_basic_setup()""")
         flags = "-DBUILD_SHARED_LIBS=ON" if self.options.shared else ""
         flags += " -DFMT_TEST=OFF -DFMT_INSTALL=OFF -DFMT_DOCS=OFF"
         if self.settings.os != "Windows" and self.options.fPIC:
-            flags += "-DCMAKE_POSITION_INDEPENDENT_CODE=TRUE"
+            flags += " -DCMAKE_POSITION_INDEPENDENT_CODE=TRUE"
         self.run('cmake fmt %s %s' % (cmake.command_line, flags))
         self.run("cmake --build . %s" % cmake.build_config)
 
