@@ -4,7 +4,7 @@ import os
 
 class FmtConan(ConanFile):
     name = "fmt"
-    version = "3.0.0"
+    version = "3.0.1"
     license = "BSD"
     url = "https://github.com/memsharded/conan-fmt"
     build_policy = "missing"
@@ -27,7 +27,7 @@ class FmtConan(ConanFile):
 
     def source(self):
        self.run("git clone https://github.com/fmtlib/fmt")
-       self.run("cd fmt && git checkout 3.0.0")
+       self.run("cd fmt && git checkout %s" % self.version)
        tools.replace_in_file("fmt/CMakeLists.txt", "project(FMT)", """project(FMT)
 include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
 conan_basic_setup()""")

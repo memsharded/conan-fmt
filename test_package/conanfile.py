@@ -4,11 +4,12 @@ import os
 
 channel = os.getenv("CONAN_CHANNEL", "testing")
 username = os.getenv("CONAN_USERNAME", "memsharded")
+reference = os.getenv("CONAN_REFERENCE", "fmt/3.0.1")
 
 
 class FmtTestConan(ConanFile):
     settings = "os", "compiler", "build_type", "arch"
-    requires = "fmt/3.0.0@%s/%s" % (username, channel)
+    requires = "%s@%s/%s" % (reference, username, channel)
     generators = "cmake"
 
     def build(self):
