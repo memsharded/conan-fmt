@@ -35,8 +35,7 @@ conan_basic_setup()""")
     def build(self):
         if self.options.header_only:
             return
-        cmake = CMake(self.settings)        
-        flags = "-DBUILD_SHARED_LIBS=ON" if self.options.shared else ""
+        cmake = CMake(self)
         flags += " -DFMT_TEST=OFF -DFMT_INSTALL=OFF -DFMT_DOCS=OFF"
         if self.settings.os != "Windows" and self.options.fPIC:
             flags += " -DCMAKE_POSITION_INDEPENDENT_CODE=TRUE"
