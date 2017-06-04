@@ -59,3 +59,5 @@ conan_basic_setup()""")
             self.cpp_info.defines.append("FMT_HEADER_ONLY")
         else:
             self.cpp_info.libs.append("fmt")
+        if self.options.shared:
+            self.cpp_info.defines.append("FMT_SHARED")
