@@ -1,5 +1,4 @@
 from conans import ConanFile, CMake, tools
-import os
 
 
 class FmtConan(ConanFile):
@@ -26,9 +25,9 @@ class FmtConan(ConanFile):
             self.build_policy = None
 
     def source(self):
-       self.run("git clone https://github.com/fmtlib/fmt")
-       self.run("cd fmt && git checkout %s" % self.version)
-       tools.replace_in_file("fmt/CMakeLists.txt", "project(FMT)", """project(FMT)
+        self.run("git clone https://github.com/fmtlib/fmt")
+        self.run("cd fmt && git checkout %s" % self.version)
+        tools.replace_in_file("fmt/CMakeLists.txt", "project(FMT)", """project(FMT)
 include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
 conan_basic_setup()""")
 
@@ -36,7 +35,7 @@ conan_basic_setup()""")
         if self.options.header_only:
             return
         cmake = CMake(self)
-        flags += " -DFMT_TEST=OFF -DFMT_INSTALL=OFF -DFMT_DOCS=OFF"
+        flags = " -DFMT_TEST=OFF -DFMT_INSTALL=OFF -DFMT_DOCS=OFF"
         if self.settings.os != "Windows" and self.options.fPIC:
             flags += " -DCMAKE_POSITION_INDEPENDENT_CODE=TRUE"
         self.run('cmake fmt %s %s' % (cmake.command_line, flags))
